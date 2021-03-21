@@ -7,6 +7,7 @@
 using namespace std;
 
 // Globals
+#define MAX_BUF_SIZE 1024
 
 // This is the list of points (3D vectors)
 vector<Vector3f> vecv;
@@ -19,7 +20,11 @@ vector<vector<unsigned> > vecf;
 
 
 // You will need more global variables to implement color and position changes
+int color = 0;
 
+// light change
+int dx = 0;
+int dy = 0;
 
 // These are convenience functions which allow us to call OpenGL 
 // methods on Vec3d objects
@@ -40,7 +45,8 @@ void keyboardFunc( unsigned char key, int x, int y )
         break;
     case 'c':
         // add code to change color here
-		cout << "Unhandled key press " << key << "." << endl; 
+        color = (color+1) % 6;
+		// cout << "Unhandled key press " << key << "." << endl; 
         break;
     default:
         cout << "Unhandled key press " << key << "." << endl;        
@@ -58,19 +64,23 @@ void specialFunc( int key, int x, int y )
     {
     case GLUT_KEY_UP:
         // add code to change light position
-		cout << "Unhandled key press: up arrow." << endl;
+		// cout << "Unhandled key press: up arrow." << endl;
+        dy++;
 		break;
     case GLUT_KEY_DOWN:
         // add code to change light position
-		cout << "Unhandled key press: down arrow." << endl;
+        dy--;
+		// cout << "Unhandled key press: down arrow." << endl;
 		break;
     case GLUT_KEY_LEFT:
         // add code to change light position
-		cout << "Unhandled key press: left arrow." << endl;
+        dx--;
+		// cout << "Unhandled key press: left arrow." << endl;
 		break;
     case GLUT_KEY_RIGHT:
         // add code to change light position
-		cout << "Unhandled key press: right arrow." << endl;
+		// cout << "Unhandled key press: right arrow." << endl;
+        dx++;
 		break;
     }
 
@@ -99,13 +109,15 @@ void drawScene(void)
     // Set material properties of object
 
 	// Here are some colors you might use - feel free to add more
-    GLfloat diffColors[4][4] = { {0.5, 0.5, 0.9, 1.0},
+    GLfloat diffColors[6][4] = { {0.5, 0.5, 0.9, 1.0},
                                  {0.9, 0.5, 0.5, 1.0},
                                  {0.5, 0.9, 0.3, 1.0},
+                                 {0.3, 0.4, 0.3, 1.0},
+                                 {0.9, 0.8, 0.7, 1.0},
                                  {0.3, 0.8, 0.9, 1.0} };
     
 	// Here we use the first color entry as the diffuse color
-    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, diffColors[0]);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, diffColors[color]);
 
 	// Define specular color and shininess
     GLfloat specColor[] = {1.0, 1.0, 1.0, 1.0};
@@ -120,14 +132,33 @@ void drawScene(void)
     // Light color (RGBA)
     GLfloat Lt0diff[] = {1.0,1.0,1.0,1.0};
     // Light position
-	GLfloat Lt0pos[] = {1.0f, 1.0f, 5.0f, 1.0f};
+	GLfloat Lt0pos[] = {1.0f + dx*0.5f, 1.0f + dy*0.5f, 5.0f, 1.0f};
 
     glLightfv(GL_LIGHT0, GL_DIFFUSE, Lt0diff);
     glLightfv(GL_LIGHT0, GL_POSITION, Lt0pos);
 
 	// This GLUT method draws a teapot.  You should replace
 	// it with code which draws the object you loaded.
-	glutSolidTeapot(1.0);
+	// glutSolidTeapot(1.0);
+
+    for (unsigned m = 0; m < vecf.size(); m++){
+        unsigned a, c, d, f, g, i;
+        vector<unsigned> v = vecf[m];
+        a = v[0];
+        c = v[2];
+        d = v[3];
+        f = v[5];
+        g = v[6];
+        i = v[8];
+        glBegin(GL_TRIANGLES);
+        glNormal3d(vecn[c-1][0],vecn[c-1][1],vecn[c-1][2]);
+        glVertex3d(vecv[a-1][0],vecn[a-1][1],vecn[a-1][2]);
+        glNormal3d(vecn[f-1][0],vecn[f-1][1],vecn[f-1][2]);
+        glVertex3d(vecv[d-1][0],vecn[d-1][1],vecn[d-1][2]);
+        glNormal3d(vecn[i-1][0],vecn[i-1][1],vecn[i-1][2]);
+        glVertex3d(vecv[g-1][0],vecn[g-1][1],vecn[g-1][2]);
+        glEnd();
+    }
     
     // Dump the image to the screen.
     glutSwapBuffers();
@@ -164,6 +195,43 @@ void reshapeFunc(int w, int h)
 void loadInput()
 {
 	// load the OBJ file here
+    char buf[MAX_BUF_SIZE];    
+    while (cin.getline(buf, MAX_BUF_SIZE)){
+        cout << buf << endl;
+        stringstream ss(buf);
+        string s;
+        ss >> s;
+        if (s == "v"){
+            Vector3f v;
+            ss >> v[0] >> v[1] >> v[2];
+            vecv.push_back(v);
+        }
+        if (s == "vn"){
+            Vector3f v;
+            ss >> v[0] >> v[1] >> v[2];
+            vecn.push_back(v);
+        }
+        if (s == "f"){
+            char del;
+            unsigned int a, b, c, d, e, f, g, h, i;
+            
+            ss >> a >> del >> b >> del >> c;
+            ss >> d >> del >> e >> del >> f;
+            ss >> g >> del >> h >> del >> i;
+            vector<unsigned> v = {};
+            v.push_back(a);
+            v.push_back(b);
+            v.push_back(c);
+            v.push_back(d);
+            v.push_back(e);
+            v.push_back(f);
+            v.push_back(g);
+            v.push_back(h);
+            v.push_back(i);
+            vecf.push_back( v);
+            
+        }
+    }
 }
 
 // Main routine.
