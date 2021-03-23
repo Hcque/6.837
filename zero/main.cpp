@@ -229,10 +229,60 @@ void loadInput()
             v.push_back(h);
             v.push_back(i);
             vecf.push_back( v);
-            
         }
     }
 }
+
+struct vdata{
+    float err;
+    Matrix4f Q;
+    int idx;
+    vector<int> face_idxs;
+};
+
+vector<vdata> errors;
+
+void fillin_vdata()
+{
+    for (int i = 0; i < vecv.size(); i++){
+        vdata vd = {0, NULL, i,  NULL};
+        errors.push_back(vd);
+    }
+    
+}
+
+void calc_Q_each_face(int f_idx, Matrix4f& Q)
+{
+
+
+
+}
+
+void initial_Q()
+{
+    
+    // init Q for vectices
+    for (int i = 0; i < vecv.size(); i++){
+
+        Matrix4f Q(0);
+        int faces = errors[i].face_idxs.size();
+        for (int j = 0; j < faces; j++){
+            Matrix4f each_face_Q(0);
+            calc_Q_each_face( errors[i].face_idxs[j] , each_face_Q);
+            Q = Q + each_face_Q;
+        }
+        Q = Q / faces;
+        errors[i].Q = Q;
+    }
+    
+}
+
+void simplify_mesh()
+{
+
+    initial_Q();
+}
+
 
 // Main routine.
 // Set up OpenGL, define the callbacks and start the main loop
