@@ -102,5 +102,7 @@ Vector4f operator * ( const Matrix4f& m, const Vector4f& v );
 
 // Matrix-Matrix multiplication
 Matrix4f operator * ( const Matrix4f& x, const Matrix4f& y );
+Matrix4f operator + ( const Matrix4f& x, const Matrix4f& y );
+Matrix4f operator * ( const Matrix4f& x, const int y );
 
 #endif // MATRIX4F_H

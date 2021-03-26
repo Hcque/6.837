@@ -689,3 +689,40 @@ Matrix4f operator * ( const Matrix4f& x, const Matrix4f& y )
 
 	return product;
 }
+
+
+
+
+Matrix4f operator + ( const Matrix4f& x, const Matrix4f& y )
+{
+	Matrix4f product; // zeroes
+
+	for( int i = 0; i < 4; ++i )
+	{
+		for( int j = 0; j < 4; ++j )
+		{
+				product( i, j ) += x( i, j ) * y( i, j );
+		}
+	}
+
+
+	return product;
+
+
+}
+
+
+Matrix4f operator * ( const Matrix4f& x, const int y ){
+	Matrix4f product; // zeroes
+
+	for( int i = 0; i < 4; ++i )
+	{
+		for( int j = 0; j < 4; ++j )
+		{
+				product( i, j ) = x( i, j ) * y;
+		}
+	}
+
+
+	return product;
+}

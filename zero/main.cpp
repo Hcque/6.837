@@ -4,6 +4,9 @@
 #include <sstream>
 #include <vector>
 #include <vecmath.h>
+#include <math.h>
+#include <utility>
+#include <algorithm>
 using namespace std;
 
 // Globals
@@ -242,25 +245,44 @@ struct vdata{
 
 vector<vdata> errors;
 
+int L = vecv.size();
+int face_idx [];
+int vecv_idx [];
 void fillin_vdata()
 {
     for (int i = 0; i < vecv.size(); i++){
-        vdata vd = {0, NULL, i,  NULL};
-        errors.push_back(vd);
+        errors[i].idx = i;
     }
-    
+    for (int i = 0; i < vecf.size(); i++){
+
+    }
 }
 
 void calc_Q_each_face(int f_idx, Matrix4f& Q)
 {
+    vector<unsigned int> f = vecf[f_idx];
+    int x = f[0];
+    int y = f[3];
+    int z = f[6];
+    int a = f[2];
+    int b = f[5];
+    int c = f[8];
+    int denom = sqrt( a*a + b*b + c*c);
+    a /= denom;
+    b /= denom;
+    c /= denom;
+    int d = -( a*x + b*y + c*z );
 
-
-
+    Q = {
+        a*a, a*b, a*c, a*d,
+        b*a, b*b, b*c, c*d,
+        c*a, c*b, c*c, c*d,
+        d*a, d*b, d*c, d*d
+    };
 }
 
 void initial_Q()
 {
-    
     // init Q for vectices
     for (int i = 0; i < vecv.size(); i++){
 
@@ -271,16 +293,64 @@ void initial_Q()
             calc_Q_each_face( errors[i].face_idxs[j] , each_face_Q);
             Q = Q + each_face_Q;
         }
-        Q = Q / faces;
+        Q = Q * (1/faces);
         errors[i].Q = Q;
     }
-    
 }
 
-void simplify_mesh()
-{
+// construct valid pairs
+struct valid_pair{
+    int first;
+    int second;
+    float err;
+};
+vector<valid_pair> valid_pairs;
 
+bool cmp(valid_pair vp1, valid_pair vp2){
+    return vp1.err > vp2.err;
+}
+
+void cal_qradr(){
+
+}
+
+void select_valid_pairs()
+{
+    for (int i =0 ; i < vecf.size(); i++){
+        int a = vecf[i][0];
+        int d = vecf[i][3];
+        int g = vecf[i][6];
+        valid_pair vp = {a-1, d-1, cal_qradr()};
+        valid_pair vp = {a-1, g-1, 0};
+        valid_pair vp = {d-1, g-1, 0};
+
+        valid_pairs.push_back( vp );
+
+    }
+}
+void simplify_mesh(int iter)
+{
     initial_Q();
+    select_valid_pairs();
+
+    do {
+        make_heap(valid_pairs.begin(), valid_pairs.end(), cmp);
+        // find the min error of that pair
+        pop_heap(valid_pairs.begin(), valid_pairs.end(), cmp);
+        valid_pair vp = valid_pairs.back(); // print 
+        valid_pairs.pop_back();
+        // delete one face, two vec
+        if ()
+        vecv[vp.first]
+        faceidx = ;
+        vec_idx = ;
+        // recalcu error for the local
+
+
+
+    } while (iter-- > 0);
+
+
 }
 
 
