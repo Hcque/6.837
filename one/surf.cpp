@@ -19,6 +19,13 @@ namespace
     }
 }
 
+#define printV3(V) printf("%f, %f, %f\n", V[0], V[1], V[2] );
+Matrix3f rotation(float theta){
+    return Matrix3f(cos(theta), 0, sin(theta),
+                    0, 1, 0,
+                    -sin(theta), 0, cos(theta)
+                                             );
+} 
 Surface makeSurfRev(const Curve &profile, unsigned steps)
 {
     Surface surface;
@@ -31,7 +38,34 @@ Surface makeSurfRev(const Curve &profile, unsigned steps)
 
     // TODO: Here you should build the surface.  See surf.h for details.
 
-    cerr << "\t>>> makeSurfRev called (but not implemented).\n\t>>> Returning empty surface." << endl;
+    // rotate the curve
+    int len = profile.size();
+    float theta = 2.0 * M_PI / steps;
+    printf("size: %d\n", len);
+
+    for (unsigned i = 0; i < steps-1; i++){
+
+        // rotating each curvepoint
+        for (unsigned j = 0; j < len; j++){
+            Vector3f V;
+            V = rotation(theta) * profile[j].V;
+            printV3(V);
+
+        }
+
+
+    }
+
+
+
+    // collecting vertices
+
+    // check normals
+
+    // collecting surface
+
+
+    // cerr << "\t>>> makeSurfRev called (but not implemented).\n\t>>> Returning empty surface." << endl;
  
     return surface;
 }

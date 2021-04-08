@@ -101,6 +101,12 @@ Curve evalBezier( const vector< Vector3f >& P, unsigned steps )
     return curve;
 }
 
+const Matrix4f B_spline( 1.0/6, -3.0/6, 3.0/6, -1.0/6,
+                            4.0/6, 0, -6.0/6, 3.0/6,
+                            1.0/6, 3.0/6, 3.0/6, -3.0/6,
+                            0, 0, 0, 1.0/6);
+
+
 Curve evalBspline( const vector< Vector3f >& P, unsigned steps )
 {
     // Check
@@ -118,16 +124,39 @@ Curve evalBspline( const vector< Vector3f >& P, unsigned steps )
     cerr << "\t>>> evalBSpline has been called with the following input:" << endl;
 
     cerr << "\t>>> Control points (type vector< Vector3f >): "<< endl;
-    for( unsigned i = 0; i < P.size(); ++i )
+    Curve curve;
+    for( unsigned i = 0; i < P.size()-3; ++i )
     {
         cerr << "\t>>> " << P[i] << endl;
+         Vector4f P0(P[i+0], 0.0);
+        Vector4f P1(P[i+1], 0.0);
+        Vector4f P2(P[i+2], 0.0);
+        Vector4f P3(P[i+3], 0.0);
+        Matrix4f ctr_points(P0, P1, P2, P3);
+
+        // printf("ctrl points: %f, %f ,%f\n", B_spline[0][0], P1[1], P2[2]);
+
+        for (float t = 0; t < 1; t += 1.0/steps){
+            printf("t:%f, %d\n", t, steps);
+            Vector3f V = V4toV3( ctr_points * B_spline * monomial_basis(t) );
+            printf("%f, %f ,%f\n", V[0], V[1], V[2]);
+
+            Vector3f T = V4toV3( ctr_points * B_spline * monomial_tangent(t) );
+
+            // in 3d , need recursive solution
+
+            Vector3f T_deri = V4toV3( ctr_points * B_spline * monomial_tangent_deri(t) );
+            Vector3f N = T_deri.normalized();
+            Vector3f B = Vector3f::cross(T, N);
+
+            CurvePoint cp = { V , T , N, B};
+            curve.push_back(cp);
+        }
     }
 
     cerr << "\t>>> Steps (type steps): " << steps << endl;
-    cerr << "\t>>> Returning empty curve." << endl;
 
-    // Return an empty curve right now.
-    return Curve();
+    return curve;
 }
 
 Curve evalCircle( float radius, unsigned steps )
