@@ -245,9 +245,9 @@ struct vdata{
 
 vector<vdata> errors;
 
-int L = vecv.size();
-int face_idx [];
-int vecv_idx [];
+// int L = vecv.size();
+// int face_idx [];
+// int vecv_idx [];
 void fillin_vdata()
 {
     for (int i = 0; i < vecv.size(); i++){
@@ -261,17 +261,17 @@ void fillin_vdata()
 void calc_Q_each_face(int f_idx, Matrix4f& Q)
 {
     vector<unsigned int> f = vecf[f_idx];
-    int x = f[0];
-    int y = f[3];
-    int z = f[6];
-    int a = f[2];
-    int b = f[5];
-    int c = f[8];
-    int denom = sqrt( a*a + b*b + c*c);
+    float x = f[0];
+    float y = f[3];
+    float z = f[6];
+    float a = f[2];
+    float b = f[5];
+    float c = f[8];
+    float denom = sqrt( a*a + b*b + c*c);
     a /= denom;
     b /= denom;
     c /= denom;
-    int d = -( a*x + b*y + c*z );
+    float d = -( a*x + b*y + c*z );
 
     Q = {
         a*a, a*b, a*c, a*d,
@@ -320,11 +320,12 @@ void select_valid_pairs()
         int a = vecf[i][0];
         int d = vecf[i][3];
         int g = vecf[i][6];
-        valid_pair vp = {a-1, d-1, cal_qradr()};
-        valid_pair vp = {a-1, g-1, 0};
-        valid_pair vp = {d-1, g-1, 0};
-
+        valid_pair vp = {a-1, d-1, 0};
+        valid_pair vp2 = {a-1, g-1, 0};
+        valid_pair vp3 = {d-1, g-1, 0};
         valid_pairs.push_back( vp );
+        valid_pairs.push_back( vp2 );
+        valid_pairs.push_back( vp3 );
 
     }
 }
@@ -340,12 +341,13 @@ void simplify_mesh(int iter)
         valid_pair vp = valid_pairs.back(); // print 
         valid_pairs.pop_back();
         // delete one face, two vec
-        if ()
-        vecv[vp.first]
-        faceidx = ;
-        vec_idx = ;
+        // if ()
+        // vecv[vp.first]
+        // faceidx = ;
+        // vec_idx = ;
         // recalcu error for the local
 
+cout << iter << endl;
 
 
     } while (iter-- > 0);
@@ -359,6 +361,7 @@ void simplify_mesh(int iter)
 int main( int argc, char** argv )
 {
     loadInput();
+    simplify_mesh(10);
 
     glutInit(&argc,argv);
 
