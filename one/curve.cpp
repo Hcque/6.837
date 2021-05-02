@@ -81,9 +81,9 @@ Curve evalBezier( const vector< Vector3f >& P, unsigned steps )
         Matrix4f ctr_points(P0, P1, P2, P3);
 
         for (float t = 0; t < 1; t += 1.0/steps){
-            printf("t:%f, %d\n", t, steps);
+            // printf("t:%f, %d\n", t, steps);
             Vector3f V = V4toV3( ctr_points * Bernstein * monomial_basis(t) );
-            printf("%f, %f ,%f\n", V[0], V[1], V[2]);
+            // printf("%f, %f ,%f\n", V[0], V[1], V[2]);
 
             Vector3f T = V4toV3( ctr_points * Bernstein * monomial_tangent(t) );
 
@@ -137,9 +137,9 @@ Curve evalBspline( const vector< Vector3f >& P, unsigned steps )
         // printf("ctrl points: %f, %f ,%f\n", B_spline[0][0], P1[1], P2[2]);
 
         for (float t = 0; t < 1; t += 1.0/steps){
-            printf("t:%f, %d\n", t, steps);
+            // printf("t:%f, %d\n", t, steps);
             Vector3f V = V4toV3( ctr_points * B_spline * monomial_basis(t) );
-            printf("%f, %f ,%f\n", V[0], V[1], V[2]);
+            // printf("%f, %f ,%f\n", V[0], V[1], V[2]);
 
             Vector3f T = V4toV3( ctr_points * B_spline * monomial_tangent(t) );
 
