@@ -1,6 +1,7 @@
 #ifndef VECTOR_4F_H
 #define VECTOR_4F_H
 
+#include "Matrix4f.h"
 class Vector2f;
 class Vector3f;
 
@@ -75,6 +76,14 @@ public:
 
 	static float dot( const Vector4f& v0, const Vector4f& v1 );
 	static Vector4f lerp( const Vector4f& v0, const Vector4f& v1, float alpha );
+	static Matrix4f outProd( const Vector4f& v0, const Vector4f& v1){
+		return Matrix4f(
+			v0[0]*v1[0], v0[0]*v1[1], v0[0]*v1[2], v0[0]*v1[3],
+			v0[1]*v1[0], v0[1]*v1[1], v0[1]*v1[2], v0[1]*v1[3],
+			v0[2]*v1[0], v0[2]*v1[1], v0[2]*v1[2], v0[2]*v1[3],
+			v0[3]*v1[0], v0[3]*v1[1], v0[3]*v1[2], v0[3]*v1[3]
+		);
+	}
 
 private:
 

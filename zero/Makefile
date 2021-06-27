@@ -4,20 +4,44 @@ INCFLAGS += -I ./include/vecmath
 LINKFLAGS  = -lglut -lGL -lGLU
 #LINKFLAGS += -L /mit/6.837/public/lib -lvecmath
 
-CFLAGS    = -O2
+APP 	 = simplify
+HPPS 	 = mesh.hpp
+OBJECTS = main.o
+
+CFLAGS    = -O2 -g
 CC        = g++
 SRCS      = main.cpp
 SRCS     += $(wildcard vecmath/*.cpp)
 OBJS      = $(SRCS:.cpp=.o)
 PROG      = a0
 
+# default:
+# 	make $(APP)
+
 all: $(SRCS) $(PROG)
 
 $(PROG): $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -o $@ $(INCFLAGS) $(LINKFLAGS)
+mesh.o: $(SRCS)
+	$(CC) $(CFLAGS) mesh.hpp -o $@ $(INCFLAGS) $(LINKFLAGS)
+
+
 
 .cpp.o:
 	$(CC) $(CFLAGS) $< -c -o $@ $(INCFLAGS)
+
+$(APP): $(OBJECTS) Makefile
+	echo 'Linking: $(APP)' && \
+	$(CC) $(INCFLAGS) $(LINKFLAGS) $(OBJECTS) -o $(APP)
+
+$(ENTRANCE).o: $(ENTRANCE).cpp $(HPPS) Makefile
+	echo 'Compiling: $(ENTRANCE).o:'	&& \
+	$(CC) $(CFLAGS) -c $*.cpp -o $*.o $(INCFLAGS) $(LINKFLAGS)
+
+%.o: %.cpp %.h Makefile
+	echo 'Compiling: $*.o' && \
+	$(CC) $(CFLAGS) -c $*.cpp -o $*.o $(INCFLAGS) $(LINKFLAGS)
+
 
 depend:
 	makedepend $(INCFLAGS) -Y $(SRCS)
@@ -26,6 +50,7 @@ clean:
 	rm $(OBJS) $(PROG)
 
 # DO NOT DELETE
+sim.o: ./sim.h
 
 main.o: ./include/vecmath/vecmath.h ./include/vecmath/Matrix2f.h
 main.o: ./include/vecmath/Matrix3f.h ./include/vecmath/Matrix4f.h

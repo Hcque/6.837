@@ -701,7 +701,7 @@ Matrix4f operator + ( const Matrix4f& x, const Matrix4f& y )
 	{
 		for( int j = 0; j < 4; ++j )
 		{
-				product( i, j ) += x( i, j ) * y( i, j );
+				product( i, j ) += x( i, j ) + y( i, j );
 		}
 	}
 

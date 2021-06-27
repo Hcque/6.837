@@ -52,45 +52,28 @@ Surface makeSurfRev(const Curve &profile, unsigned steps)
     printf("size of profile: %d\n", pro_len);
     printf("steps : %d\n", steps);
 
-    for (unsigned i = 0; i < steps; i++){
-            
-        // rotating each curvepoint
-        for (unsigned j = 0; j < pro_len; j++){
-            Vector3f V = rotation(theta*j) * profile[j].V;
+    for (unsigned i = 0; i < profile.size(); i++){
+        for (unsigned j = 0; j < steps; j++){
+            Vector4f x = Vector4f( profile[i].V, 1.0);
+            Matrix4f rota =  Matrix4f::rotateY(theta*j);
+            Matrix3f rotaN =  rota.getSubmatrix3x3(0,0).transposed().inverse();
             Vector3f N = (-1.0) *trans_norm(theta*j) * profile[j].N;
-            VV.push_back(V);
-            VN.push_back(N);
-            if (i == 0){
-            // printV3(profile[j].V)
-            // printV3(profile[j].N)
-            // printV3(profile[j].N)
-            // printf("===========");
-            }
+            VV.push_back( (rota * x).xyz() );
+            VN.push_back( (1) * rotaN * profile[i].N );
         }
     }
     printf("collected size (VV): %d\n ", VV.size());
     // collecting vertices
-    for (unsigned i = 0; i < steps; i++){
-        for (unsigned j = 0; j < pro_len; j++){
+    for (unsigned i = 0; i < profile.size()-1; i++){
+        for (unsigned j = 0; j < steps-1; j++){
 
-            if (j == pro_len -1){
-                // printf("J\n");
-
-            }
-            if (i == steps - 1){
-                
-            }
             // assume not hit the end of the line;
             // assume on its right has next line;
-            else {
-                Tup3u t3(i*pro_len + j  , (i+1)*pro_len + j + 1, i*pro_len + j + 1);
-                VF.push_back(t3);
-                // printf(t3[0]);
+            Tup3u t3(i*steps + j  , (i+1)*steps + j + 1, i*steps + j + 1);
+            VF.push_back(t3);
 
-                Tup3u tt3(i*pro_len + j , (i+1)*pro_len + j , (i+1)*pro_len + j + 1);
-                VF.push_back(tt3);
-            }
-
+            Tup3u tt3(i*steps + j , (i+1)*steps + j , (i+1)*steps + j + 1);
+            VF.push_back(tt3);
         }
     }
     printf("vf size:%d\n", VF.size());
@@ -112,9 +95,26 @@ Surface makeGenCyl(const Curve &profile, const Curve &sweep )
     }
 
     // TODO: Here you should build the surface.  See surf.h for details.
-
-    
-
+    for (int i = 0; i < sweep.size(); i++){
+        Matrix4f coor(
+            sweep[i].N[0], sweep[i].B[0], sweep[i].T[0], sweep[i].V[0],
+            sweep[i].N[1], sweep[i].B[1], sweep[i].T[1], sweep[i].V[1],
+            sweep[i].N[2], sweep[i].B[2], sweep[i].T[2], sweep[i].V[2],
+            0.0, 0.0, 0.0, 1.0
+            );
+        Matrix3f rota = coor.getSubmatrix3x3(0,0);
+        Matrix3f rota_N = rota.transposed().inverse();
+        for (int j = 0; j < profile.size(); j++){
+            surface.VV.push_back( (coor * Vector4f(profile[j].V, 1.0)).xyz() );
+            surface.VN.push_back( -1 * rota_N * profile[j].N );
+        }
+    }
+    for (int i = 0; i < sweep.size()-1; i++){
+        for (int j = 0; j < profile.size()-1; j++){
+            surface.VF.push_back( Tup3u( i, i + profile.size(), i+1) );
+            surface.VF.push_back( Tup3u( i+1, i + profile.size(), i+1 + profile.size()) );
+        }
+    }
     // cerr << "\t>>> makeGenCyl called (but not implemented).\n\t>>> Returning empty surface." <<endl;
 
     return surface;
