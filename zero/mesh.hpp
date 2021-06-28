@@ -41,7 +41,7 @@ private:
  struct Vertex {
     Vector3f dim;
     Matrix4f Q;
-    float q[16] = {0.0f};
+    float q[16];
 
     vector<int> faces;
     int valid;
@@ -80,9 +80,11 @@ private:
     void calculate_Q();
     void select_pairs();
     void aggregation();
-    void get_p(Face f, Vector4f& p);
+    void get_p(Face& f, Vector4f& p);
     void search_vertex(int origin);
     void remove_pair_heap(int v);
+    // void add_kp(const Face &face, double *kp);
+    void add_kp(int f, Matrix4f& kp);
  Matrix4f _adding(Matrix4f& m1, Matrix4f& m2);
 
     vector<Vertex> vertexs;
@@ -133,7 +135,7 @@ void Mesh::load_from_file(string path){
     cout << "================" << endl;
 }
 
-void Mesh::get_p(Face f, Vector4f& p){
+void Mesh::get_p(Face& f, Vector4f& p){
     Vector3f a =  vertexs[f.vertex3[0]].dim;
     // cout << "vect on face ,a: " << a << endl;
     Vector3f b =  vertexs[f.vertex3[1]].dim;
@@ -148,6 +150,20 @@ void Mesh::get_p(Face f, Vector4f& p){
     p[1] = pv[1];
     p[2] = pv[2];
     p[3] = Vector3f::dot(a, pv) * (-1.0f); // d ? TODO
+}
+void Mesh:: add_kp(int f, Matrix4f& kp) {
+    Vector4f p;
+    get_p(faces[f], p);
+    //add to q
+    Matrix4f m = Vector4f::outProd(p,p);
+    kp = kp + m;
+    //  memset(kp, 0 ,sizeof(int)*16);
+    // for (int k = 0; k < 4; k++){
+    //     for (int h = 0; h < 4; h++){
+    //         kp[k*4 + h] += m.getRow(k)[h];
+    //         // cout << kp[k*4+h] << endl;
+    //     }
+    // }
 }
 
 //  Matrix4f Mesh::_adding(Matrix4f& m1, Matrix4f& m2){
@@ -166,38 +182,18 @@ void Mesh::get_p(Face f, Vector4f& p){
 // }
 void Mesh::calculate_Q() {
     cout << "calculate Q" << endl;
-    for (Vertex v: vertexs){
-        // v.Q = ( 
-        //     0.0, 0.0, 0.0, 0.0,
-        //     0.0, 0.0, 0.0, 0.0,
-        //     0.0, 0.0, 0.0, 0.0,
-        //     0.0, 0.0, 0.0, 0.0
-        // );
-        for (int f: v.faces){
-            Vector4f p;
-            get_p(faces[f], p);
-            //add to q
-            Matrix4f m = Vector4f::outProd(p,p);
-            v.Q = v.Q + m;
+    for (int vi = 0; vi < vertexs.size(); vi++){
+    
+        for (int f: vertexs[vi].faces){
         // cout << "vQ" << v.Q.getRow(0).x() << endl;
         // cout << "m" << m.getRow(0).x() << endl;
-        }
         // do for q
-        memset(v.q, 0 ,sizeof(int)*16);
-        for (int k = 0; k < 4; k++){
-            for (int h = 0; h < 4; h++){
-                v.q[k*4 + h] += v.Q.getRow(k)[h];
-            }
+        // add_Kp
+            add_kp(f, vertexs[vi].Q);
         }
-        // q[k] += 
 
-        cout << "vQ" << v.Q.getRow(0).x() << endl;
+        // cout << "vQ" << v.Q.getRow(0).x() << endl;
     }
-    for (Vertex v: vertexs){
-        // cout << v.Q.getRow(0).x() << endl;
-        // cout << "vq:" << v.q[5] << endl;
-    }
-
 
 }
 
@@ -288,6 +284,9 @@ void Mesh::aggregation() {
 void Mesh::simplify(float ratio){
     cout << "simplify " << endl;
     calculate_Q();
+    // for (Vertex v: vertexs){
+    //     cout << v.Q.getRow(0)[0] << endl;
+    // }
     select_pairs();
     face_cnt = faces.size();
     cout << "facecnt: " << face_cnt << endl;
