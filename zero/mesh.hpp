@@ -217,6 +217,7 @@ inline float calculate_cost(Vector4f& p, Matrix4f Q){
     Vector4f pp(p1,p2,p3,p4);
     float ans = Vector4f::dot(pp,p);
     // assert(0);
+    cout << "cost" << ans << endl;
     return ans;
 }
 
@@ -241,7 +242,7 @@ void Mesh::select_pairs(){
 
                 float cost = calculate_cost(mid_p , Q1 + Q2);
                 // cout << "cost:" << cost << endl;
-                assert(cost >= 0);
+                // assert(cost >= 0);
                 heap.push(Pair(v1, v2, cost));
             }
         }
@@ -257,7 +258,7 @@ void Mesh::remove_pair_heap(int v){
 
 void Mesh::aggregation() {
     Pair pair = heap.top(); heap.pop();
-    // cout << "this pair cost " << pair.cost  << endl;
+    cout << "this pair cost " << pair.cost  << endl;
     int v1 = pair.v1, v2 = pair.v2;
     // revise v2
     vertexs[v2].dim = (vertexs[v1].dim + vertexs[v2].dim) / 2;
@@ -301,7 +302,15 @@ void Mesh::simplify(float ratio){
 
 void Mesh::write_into_file(string path){
     cout << "write to file " << endl;
-
+    ofstream out;
+    out.open(path);
+    for (Vertex v: vertexs) if (v.valid){
+        out << "v " << v.dim[0] << " " << v.dim[1] << " " << v.dim[2] << endl;
+    }
+    for (Face f: faces) if (f.valid){
+        out << "f " << f.vertex3[0] << " " << f.vertex3[1]  << " " << f.vertex3[2] << endl;
+    }
+    out.close();
 }
 
 #endif

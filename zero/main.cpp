@@ -242,9 +242,12 @@ void loadMesh(string input)
 {
 	// load the OBJ file here
     cout << " Mesh OBJ load ...  " << endl;
-    ifstream infile(input);
-    string buf;    
-    while (getline(infile, buf)){
+    // ifstream infile(input);
+    // string buf;    
+    // while (getline(infile, buf)){
+
+    char buf[MAX_BUF_SIZE];    
+    while (cin.getline(buf, MAX_BUF_SIZE)){
         stringstream ss(buf);
         string s;
         ss >> s;
@@ -344,27 +347,25 @@ void drawMesh(void)
     // Dump the image to the screen.
     glutSwapBuffers();
 
-
 }
 
 // Main routine.
 // Set up OpenGL, define the callbacks and start the main loop
 int main( int argc, char** argv )
 {
-    // loadInput();
+    loadInput();
 
-    // string input = argv[3], output = argv[2];
-    string input = "arma.obj"; //TODO
-    string output = "out.obj";
+    string input = argv[3], output = argv[2];
     loadMesh(input);
 
-    Mesh mesh;
-    mesh.load_from_file(input);
-    // mesh.simplify( atof(argv[4]) );
-    mesh.simplify(0.5);
-    mesh.write_into_file(output);
+    // Mesh mesh;
+    // mesh.load_from_file(input);
+    // // mesh.simplify( atof(argv[4]) );
+    // mesh.simplify(0.5);
+    // mesh.write_into_file(output);
 
 
+    loadMesh(output);
     glutInit(&argc,argv);
 
     // We're going to animate it, so double buffer 
