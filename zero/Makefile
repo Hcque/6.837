@@ -1,8 +1,15 @@
 INCFLAGS  = -I /usr/include/GL
+<<<<<<< HEAD
+INCFLAGS += -I /mit/6.837/public/include/vecmath
+
+LINKFLAGS  = -lglut -lGL -lGLU
+LINKFLAGS += -L /mit/6.837/public/lib -lvecmath
+=======
 INCFLAGS += -I ./include/vecmath
 
 LINKFLAGS  = -lglut -lGL -lGLU
 #LINKFLAGS += -L /mit/6.837/public/lib -lvecmath
+>>>>>>> f2fa124e8b132665cdaacbe512c17a59111bd0be
 
 APP 	 = simplify
 HPPS 	 = mesh.hpp
@@ -11,7 +18,10 @@ OBJECTS = main.o
 CFLAGS    = -O2 -g
 CC        = g++
 SRCS      = main.cpp
+<<<<<<< HEAD
+=======
 SRCS     += $(wildcard vecmath/*.cpp)
+>>>>>>> f2fa124e8b132665cdaacbe512c17a59111bd0be
 OBJS      = $(SRCS:.cpp=.o)
 PROG      = a0
 
@@ -49,6 +59,8 @@ depend:
 clean:
 	rm $(OBJS) $(PROG)
 
+<<<<<<< HEAD
+=======
 # DO NOT DELETE
 sim.o: ./sim.h
 
@@ -69,3 +81,4 @@ vecmath/Quat4f.o: ./include/vecmath/Quat4f.h ./include/vecmath/Matrix3f.h
 vecmath/Quat4f.o: ./include/vecmath/Vector3f.h ./include/vecmath/Vector4f.h
 vecmath/Matrix2f.o: ./include/vecmath/Matrix2f.h ./include/vecmath/Vector2f.h
 
+>>>>>>> f2fa124e8b132665cdaacbe512c17a59111bd0be
