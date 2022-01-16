@@ -1,11 +1,25 @@
-在建筑设计中， 人们常用CAD，Adobe等软件究竟是怎么实现的，传统设计是否有优化的可能？ 在医学成像中，如何帮助医生诊断和手术，减少患者病痛？ 计算机图形学作为计算机应用吸引着我。这里是MIT的本科计算机图形学课程的作业代码和一部分中国科大 数字几何处理 研究生作业代码，也是我初尝图形学的经历。
-这里我侧重于算法的探究和实现。
-第一次作业见 ， 初步了解openGL读取obj文件的过程， 也尝试实现了一个几何网格简化的算法。
-第二次作业是讨论线的算法。这里实现了Bspline， Bezer，这里主要是basis的变换。
-我暂时跳过了物理模拟，
-第四第五次作业是渲染， 第一步实现ray casting， 在ray生成后和每一个物体求交点。然后根据光照角度和材质颜色给出每个像素的颜色，最后整合成一张图片。
-值得注意的是，加入阴影的方法和ray casting类似，，通过求交点判断是否有物体遮挡光源。
-第二步是ray tracing，修改之前的ray casting， 我们递归每一条ray，并且包括每一条ray的反射光和折射光。
+# computer graphics hands-on
 
+There are five assignments to give me hands-on experience on cpp and graphics.
 
-数字几何处理的课程主要是mesh的处理相关论文。 我复现了filter based denosing ，其他还在进行中。
+=========================================
+The ZERO folder is for dealing with read obj files, The real interesting parts is the implenmenting the mesh simplification described in "";
+I gets familiarity on Eigen and various data structures. Particularity , I combine the hash table and priority queue to achieve O(1) entry deletion.
+Other exploration detail:
+1) to try different terms on the error function when selecting edges to eliminate. 
+	2) dfs, with bounded depth , for selection indirected neighbour edges 
+
+The result on glimpse:
+
+======================
+The ONE folder is focused on curves and surfaces. The Bspline & bezer curve could be done both by change of basis and recursive algorithm. I partially complete this assignment.
+
+=======================
+The TWO is skipped.
+=======================
+The THREE is for particle simulation.
+========================
+THE FOUR combine the ray casting and recursive ray tracing , I also refer to  Peter Shirley's Ray Tracing: The Next Week serials.
+
+=========================
+
