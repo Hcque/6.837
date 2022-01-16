@@ -3,14 +3,14 @@
 There are five assignments to give me hands-on experience on cpp and graphics.
 
 =========================================
-The ZERO folder is for dealing with read obj files, The real interesting parts is the implenmenting the mesh simplification described in "";
+The ZERO folder is for dealing with read obj files, The real interesting parts is the implenmenting the mesh simplification described in "Surface Simplification Using Quadric Error Metrics";
 I gets familiarity on Eigen and various data structures. Particularity , I combine the hash table and priority queue to achieve O(1) entry deletion.
 Other exploration detail:
 1) to try different terms on the error function when selecting edges to eliminate. 
 2) dfs, with bounded depth , for selection indirected neighbour edges 
 
 The result on glimpse:
-![alt text](https://user-images.githubusercontent.com/43036142/149653017-8bc3a750-3543-4a6f-8471-207484ad23f3.png)
+![Imgur Image](https://user-images.githubusercontent.com/43036142/149653017-8bc3a750-3543-4a6f-8471-207484ad23f3.png)
 
 ======================
 The ONE folder is focused on curves and surfaces. The Bspline & bezer curve could be done both by change of basis and recursive algorithm. I partially complete this assignment.
