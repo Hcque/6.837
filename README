@@ -10,7 +10,7 @@ Other exploration detail:
 2) dfs, with bounded depth , for selection indirected neighbour edges 
 
 The result on glimpse:
-![Imgur Image](https://user-images.githubusercontent.com/43036142/149653017-8bc3a750-3543-4a6f-8471-207484ad23f3.png)
+![Image](https://user-images.githubusercontent.com/43036142/149653017-8bc3a750-3543-4a6f-8471-207484ad23f3.png)
 
 ======================
 The ONE folder is focused on curves and surfaces. The Bspline & bezer curve could be done both by change of basis and recursive algorithm. I partially complete this assignment.
