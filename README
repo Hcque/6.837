@@ -1,19 +1,19 @@
+
 # computer graphics 
 
-There are five assignments to give me hands-on experience on cpp and graphics.
+There are five assignments to give me hands-on experience on cpp and graphics. It is originated from MITOCW 6.837.
 
 =========================================
-The ZERO folder is for dealing with read obj files, The real interesting parts is the implenmenting the mesh simplification described in "Surface Simplification Using Quadric Error Metrics";
-I gets familiarity on Eigen and various data structures. Particularity , I combine the hash table and priority queue to achieve O(1) entry deletion.
-Other exploration detail:
-1) to try different terms on the error function when selecting edges to eliminate. 
-2) dfs, with bounded depth , for selection indirected neighbour edges 
+The ZERO folder is for dealing with read obj files, run example:
+./a0 < sphere.obj
 
-The result on glimpse:
-![Image](https://user-images.githubusercontent.com/43036142/149653017-8bc3a750-3543-4a6f-8471-207484ad23f3.png)
+The real interesting parts is the implenmenting the mesh simplification described in "Surface Simplification Using Quadric Error Metrics"; Please refer to my another repo:
+https://github.com/Hcque/AMMesh/tree/main/src/hw9
 
 ======================
-The ONE folder is focused on curves and surfaces. The Bspline & bezer curve could be done both by change of basis and recursive algorithm. I partially complete this assignment.
+The ONE folder, run example:
+./a0 swp/circle.swp
+focused on curves and surfaces. The Bspline & bezer curve could be constructed both by change of basis and recursive algorithm. I partially complete the curve part this assignment.
 
 =======================
 The TWO is skipped.
@@ -23,4 +23,3 @@ The THREE is for particle simulation.
 THE FOUR combine the ray casting and recursive ray tracing , I also refer to  Peter Shirley's Ray Tracing: The Next Week serials.
 
 =========================
-
