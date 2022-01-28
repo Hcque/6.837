@@ -16,11 +16,17 @@ The result on glimpse:
 The ONE folder is focused on curves and surfaces. The Bspline & bezer curve could be done both by change of basis and recursive algorithm. I partially complete this assignment.
 
 =======================
-The TWO is skipped.
+The TWO is skipped (time limited for me);
 =======================
-The THREE is for particle simulation.
+The THREE is for particle simulation. We use the eluer and high order numeric approaches for solving differential equations.
+
+
 ========================
 THE FOUR combine the ray casting and recursive ray tracing , I also refer to  Peter Shirley's Ray Tracing: The Next Week serials.
 
 =========================
+myrender also implements the ray traceing, following the tutorial "ray tracer in one weekend", 
+run g++ main.cpp,
+then run ./a > test.ppm gives the image of one specific scene. The outcome has some flaw, I will improve this in the future.
+
 
