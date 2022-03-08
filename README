@@ -15,11 +15,8 @@ The ONE folder, run example:
 ./a0 swp/circle.swp
 focused on curves and surfaces. The Bspline & bezer curve could be constructed both by change of basis and recursive algorithm. I partially complete the curve part this assignment.
 
-=======================
-The TWO is skipped.
-=======================
-The THREE is for particle simulation.
+
 ========================
-THE FOUR combine the ray casting and recursive ray tracing , I also refer to  Peter Shirley's Ray Tracing: The Next Week serials.
+THE myrender folder combine the ray casting and recursive ray tracing , I also refer to  Peter Shirley's Ray Tracing: The Next Week serials.
 
 =========================
