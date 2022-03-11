@@ -28,8 +28,8 @@ namespace
   {
     // seed the random number generator with the current time
     srand( time( NULL ) );
-    system = new SimpleSystem();
-    timeStepper = new RK4();		
+    system = new SimpleSystem(0.8, 10);
+    timeStepper = new ForwardEuler();		
   }
 
   // Take a step forward for the particle shower

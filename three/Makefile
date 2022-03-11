@@ -1,7 +1,7 @@
 # INCFLAGS  = -I vecmath/include
 INCFLAGS  = -I /usr/include/GL
 # INCFLAGS += -I /usr/include/GL
-INCFLAGS += -I 	./include/vecmath
+INCFLAGS += -I 	./vecmath/include
 
 LINKFLAGS = -lglut -lGL -lGLU -L. -lRK4 -no-pie
 CFLAGS    = -g -Wall -ansi 
